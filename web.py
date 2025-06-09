@@ -71,7 +71,13 @@ def getdatahttp(code,table_name):
             "Next2Close":0
         }
         converted_data.append(converted)
-    return converted_data[:-1]
+    now = datetime.now()
+    start_time = now.replace(hour=9, minute=15, second=0, microsecond=0)
+    end_time = now.replace(hour=15, minute=0, second=0, microsecond=0)
+    if start_time <= now <= end_time:
+        return converted_data[:-1]
+    else:
+        return converted_data
 
 def handle_request(code, table_name, format_type='json'):
     converted_data = getdatahttp(code,table_name)
