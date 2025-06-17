@@ -25,7 +25,25 @@ def getdatahttp(code,table_name):
         api_url = f"https://push2his.eastmoney.com/api/qt/stock/kline/get?secid={secid}&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61&klt=101&fqt=1&end={end_date}&lmt=1488"  # 替换为实际API地址
 
     try:
-        response = requests.get(api_url, timeout=10)
+        headers = {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "Accept-Encoding": "gzip, deflate, br, zstd",
+            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+            "Cache-Control": "max-age=0",
+            "Connection": "keep-alive",
+            "Cookie": "qgqp_b_id=a44643c0809045421a902c854dc3e241; HAList=ty-102-CL00Y-NYMEX%u539F%u6CB9%2Cty-0-300533-%u51B0%u5DDD%u7F51%u7EDC%2Cty-1-600259-%u5E7F%u665F%u6709%u8272; websitepoptg_api_time=1750142006381; st_pvi=58004899072353; st_sp=2024-04-01%2015%3A53%3A35; st_inirUrl=https%3A%2F%2Fcn.bing.com%2F",
+            "Host": "push2his.eastmoney.com",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0",
+            "sec-ch-ua": '"Microsoft Edge";v="137", "Chromium";v="137", "Not/A)Brand";v="24"',
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "macOS"
+        }
+        response = requests.get(api_url, headers=headers, timeout=10)
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
         return {"error": f"API请求失败: {str(e)}"}, 500
