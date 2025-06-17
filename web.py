@@ -71,13 +71,7 @@ def getdatahttp(code,table_name):
             "Next2Close":0
         }
         converted_data.append(converted)
-    now = datetime.now()
-    start_time = now.replace(hour=9, minute=15, second=0, microsecond=0)
-    end_time = now.replace(hour=15, minute=0, second=0, microsecond=0)
-    if start_time <= now <= end_time:
-        return converted_data[:-1]
-    else:
-        return converted_data
+    return converted_data
 
 def handle_request(code, table_name, format_type='json'):
     converted_data = getdatahttp(code,table_name)
@@ -94,6 +88,12 @@ def handle_request(code, table_name, format_type='json'):
             if i < len(converted_data) - 2:
                 converted_data[i]["Next2Open"] = converted_data[i + 2]["Open"]
                 converted_data[i]["Next2Close"] = converted_data[i + 2]["Close"]
+    
+    now = datetime.now()
+    start_time = now.replace(hour=9, minute=15, second=0, microsecond=0)
+    end_time = now.replace(hour=15, minute=0, second=0, microsecond=0)
+    if start_time <= now <= end_time:
+        converted_data = converted_data[:-1]
     # 返回数据
     if not converted_data:
         return {"error": "没有有效数据"}, 404
