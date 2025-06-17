@@ -69,6 +69,7 @@ def getdatahttp(code,table_name):
             "NextClose":0,
             "Next2Open":0,
             "Next2Close":0
+            "Next5Close":0
         }
         converted_data.append(converted)
     return converted_data
@@ -82,13 +83,16 @@ def handle_request(code, table_name, format_type='json'):
     # 处理数据StrategyName为下一条的StrategyName，Next2StrategyName为下下条的StrategyName
     if(table_name=="stock_day_k"):
         for i in range(len(converted_data)):
-            if i < len(converted_data) - 1:
-                converted_data[i]["NextOpen"] = converted_data[i + 1]["Open"]
-                converted_data[i]["NextClose"] = converted_data[i + 1]["Close"]
-            if i < len(converted_data) - 2:
-                converted_data[i]["Next2Open"] = converted_data[i + 2]["Open"]
-                converted_data[i]["Next2Close"] = converted_data[i + 2]["Close"]
-    
+        if i < len(converted_data) - 1:
+            converted_data[i]["NextOpen"] = converted_data[i + 1]["Open"]
+            converted_data[i]["NextClose"] = converted_data[i + 1]["Close"]
+        if i < len(converted_data) - 2:
+            converted_data[i]["Next2Open"] = converted_data[i + 2]["Open"]
+            converted_data[i]["Next2Close"] = converted_data[i + 2]["Close"]
+        if i < len(converted_data) - 5:
+            # 计算5天后的收益，收益计算公式为：(5天后收盘价 - 当前收盘价) / 当前收盘价
+            converted_data[i]["Next5Close"] = converted_data[i + 5]["Close"]
+
     now = datetime.now()
     start_time = now.replace(hour=9, minute=15, second=0, microsecond=0)
     end_time = now.replace(hour=15, minute=0, second=0, microsecond=0)
