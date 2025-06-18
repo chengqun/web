@@ -24,8 +24,11 @@ def getdatahttp(code,table_name):
     else:
         api_url = f"https://push2his.eastmoney.com/api/qt/stock/kline/get?secid={secid}&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61&klt=101&fqt=1&end={end_date}&lmt=1488"  # 替换为实际API地址
 
+    # 模拟浏览器请求，添加请求头
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
     try:
-        response = requests.get(api_url, timeout=10)
+        response = requests.get(api_url, headers=headers, timeout=10)
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
         return {"error": f"API请求失败: {str(e)}"}, 500
