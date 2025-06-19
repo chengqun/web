@@ -79,7 +79,33 @@ def getdatahttp(code,table_name):
 
 def handle_request(code, table_name, format_type='json'):
     converted_data = getdatahttp(code,table_name)
+    # 从sqlite中读取数据，将converted_data 列表中StrategyName字段补全，根据日期匹配
+    # 连接到 SQLite 数据库（假设数据库文件为 'stock_data.db'）
+    conn = sqlite3.connect(r"../Lean/Data/AAshares/QuantConnectBase.db3") 
+    cursor = conn.cursor()
 
+    # 执行 SQL 查询，从 LiveStockData 表中获取日期和策略名称，根据 code 筛选
+    query = "SELECT date, StrategyName FROM LiveStockData WHERE code = ?"
+    cursor.execute(query, (code,))
+
+    # 获取查询结果
+    sqlite_data = cursor.fetchall()
+
+    # 将查询结果转换为字典，键为日期，值为策略名称
+    sqlite_dict = {row[0]: row[1] for row in sqlite_data}
+
+    # 遍历 converted_data 列表，根据日期匹配补全 StrategyName 字段
+    for item in converted_data:
+        date_str = item["Date"].split(' ')[0]  # 提取日期部分
+        if date_str in sqlite_dict:
+            item["StrategyName"] = sqlite_dict[date_str]
+
+    # 关闭连接
+    conn.close()
+        
+    # 返回数据
+    if not converted_data:
+        return {"error": "没有有效数据"}, 404
     # converted_data是一个时序数组
     # 处理数据NextOpen为下一条的Open，Next2Opne为下下条的Open
     # 处理数据NextClose为下一条的Close，Next2Close为下下条的Close
@@ -101,9 +127,9 @@ def handle_request(code, table_name, format_type='json'):
     end_time = now.replace(hour=15, minute=0, second=0, microsecond=0)
     if start_time <= now <= end_time:
         converted_data = converted_data[:-1]
-    # 返回数据
-    if not converted_data:
-        return {"error": "没有有效数据"}, 404
+
+    
+
     # 根据要求格式化输出
     if format_type == 'csv':
         # 生成CSV
