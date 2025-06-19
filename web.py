@@ -79,6 +79,9 @@ def getdatahttp(code,table_name):
 
 def handle_request(code, table_name, format_type='json'):
     converted_data = getdatahttp(code,table_name)
+    # 返回数据
+    if not converted_data:
+        return {"error": "没有有效数据"}, 404
     # 从sqlite中读取数据，将converted_data 列表中StrategyName字段补全，根据日期匹配
     # 连接到 SQLite 数据库（假设数据库文件为 'stock_data.db'）
     conn = sqlite3.connect(r"../Lean/Data/AAshares/QuantConnectBase.db3") 
@@ -103,9 +106,7 @@ def handle_request(code, table_name, format_type='json'):
     # 关闭连接
     conn.close()
         
-    # 返回数据
-    if not converted_data:
-        return {"error": "没有有效数据"}, 404
+
     # converted_data是一个时序数组
     # 处理数据NextOpen为下一条的Open，Next2Opne为下下条的Open
     # 处理数据NextClose为下一条的Close，Next2Close为下下条的Close
