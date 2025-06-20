@@ -34,7 +34,7 @@ for x in data:
         all_values.append(values)
 
 insert_sql = '''
-    INSERT OR IGNORE INTO LiveStockData ("Date", "Code", "Name", "StrategyName")
+    INSERT OR IGNORE INTO StrategyData ("Date", "Code", "Name", "StrategyName")
     VALUES (?,?,?,?)
 '''
 # 批量插入数据

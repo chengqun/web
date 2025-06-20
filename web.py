@@ -88,7 +88,7 @@ def handle_request(code, table_name, format_type='json'):
     cursor = conn.cursor()
 
     # 执行 SQL 查询，从 LiveStockData 表中获取日期和策略名称，根据 code 筛选
-    query = "SELECT date, StrategyName FROM LiveStockData WHERE code = ?"
+    query = "SELECT date, StrategyName FROM StrategyData WHERE code = ?"
     cursor.execute(query, (code,))
 
     # 获取查询结果

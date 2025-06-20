@@ -35,7 +35,7 @@ all_values.extend(processed_data_tuples)
 # print(all_values)
 
 insert_sql = '''
-    INSERT OR IGNORE INTO LiveStockData ("Date","Code","StrategyName")
+    INSERT OR IGNORE INTO StrategyData ("Date","Code","StrategyName")
     VALUES (?,?,?)
 '''
 # 批量插入数据
